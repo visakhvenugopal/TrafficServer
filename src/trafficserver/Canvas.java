@@ -10,21 +10,25 @@ package trafficserver;
  */
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.Timer;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.stream.GraphParseException;
-import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.ViewerListener;
 
 
-public class Canvas extends javax.swing.JPanel //Canvas for drawing graph
+public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas for drawing graph
 {
 
     //variables
@@ -37,12 +41,14 @@ public class Canvas extends javax.swing.JPanel //Canvas for drawing graph
     private int edgeCount = 2;
     private Random rnd;
     private float zoomLevel = 1.0f;
+    protected boolean loop = true;
+    public double curNodeXYCords[] = { 76.2936 , -9.9902};
     
-        
-    public Canvas() 
+    
+    public Canvas() throws InterruptedException 
     {
         initComponents();
-        this.drawPanel.setLayout(new BorderLayout());
+        this.panelDrawCanvas.setLayout(new BorderLayout());
         
         graph = new MultiGraph("RoadNetwork");
         graph.setStrict(false);
@@ -50,101 +56,72 @@ public class Canvas extends javax.swing.JPanel //Canvas for drawing graph
         //graph.addAttribute("ui.stylesheet", "graph{ fill-color: grey; } sprite{ fill-color: yellow; } node{shape: box; size: 10px, 10px; fill-mode: plain; fill-color: red; stroke-mode: plain;stroke-color: blue;}");
         graph.addAttribute("ui.stylesheet", "graph { fill-color: grey; }");
         graph.addAttribute("ui.stylesheet", "node {\n" + 
-                                            "    size: 3px;\n" +
-                                            "    fill-color: red;\n" +
-                                            "    text-mode: hidden;\n" +
+                                            "    size: 10px;\n" +
+                                            "    fill-mode: dyn-plain;\n" +
+                                            "    fill-color: #222, #555, green, red ;\n" +
+                                            "    text-mode: normal ;\n" +
                                             "    z-index: 0;\n" +
                                             "}\n" +
                                             "edge {\n" +
                                             "    shape: line;\n" +
-                                            "    fill-color: #222;\n" +
-                                            "    arrow-size: 3px, 2px;\n" +
-                                            "}");
+                                            "    fill-mode: dyn-plain;\n" +
+                                            "    fill-color: #222, #555, green, red ;\n" +
+                                            "    arrow-size: 6px, 4px;\n" +
+                                            "}"+
+                                            "node:clicked{fill-color:black;}");
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
         try {
-		graph.read("D:\\Projects\\NetBeans\\TrafficServer\\src\\assets\\LeHavre.dgs");
-                //graph.read(null, null);
+		graph.read("D:\\Projects\\NetBeans\\TrafficServer\\src\\assets\\cochi.dgs");
 	} 
         catch(IOException | GraphParseException | ElementNotFoundException e) 
         {
-            e.printStackTrace();
+            System.out.println(e);
 	    return;
         }
         
-        viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-        view   = viewer.addDefaultView(false);  
+        viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        view   = viewer.addDefaultView(false);
+        
+        //ViewerPipe fromViewer = viewer.newViewerPipe();
+        //fromViewer.addViewerListener(this);
+        //fromViewer.addSink(graph);
+        view.addMouseListener(new MouseManager(graph,view,viewer,curNodeXYCords,this));
+        //view.setMouseManager(new MouseMan(graph,view));
         
         sMan = new SpriteManager(graph);
         
         rnd = ThreadLocalRandom.current();
         
-        
         renderScene();
-        //zoomScene();
-        
-        //this.add((Component) view,BorderLayout.CENTER);
-        this.drawPanel.add((Component) view,BorderLayout.CENTER);
+        this.panelDrawCanvas.add((Component) view,BorderLayout.CENTER);
         this.setVisible(true);
+        
+        //new UpdateTimer(graph).start();
+       // this.wait(5000);
+        new UpdateEdgeColor(graph).start();
         
     }
     
     
     private synchronized void renderScene()
+    {        
+        setOrigin();
+        zoomScene();
+    }
+    
+    private synchronized void setOrigin()
     {
-        //should read from local graph data structures 
-        /*for(int i=1; i<=10 ;i++)
-        {
-            Node node = graph.addNode(String.valueOf(i));
-            node.setAttribute("xyz",i,i,0);
-            node.setAttribute("ui.label",node.getId());
-        }*/
-        /*
-        graph.addNode("A");
-        Node node = graph.getNode("A");
-        node.setAttribute("xyz",1,1,0);
-        String a = "Ambadi";
-        node.setAttribute("ui.label",a);
-        
-        graph.addNode("B");
-        Node nodeB = graph.getNode("B");
-        nodeB.setAttribute("xyz",2,2,0);
-        nodeB.setAttribute("ui.label", "Balikeramala");
-        
-        graph.addNode("C");
-        Node nodeC = graph.getNode("C");
-        nodeC.setAttribute("xyz",2,3,0);
-        nodeC.setAttribute("ui.label", "Balikeramala");
-        */
-        //Sprite s = sMan.addSprite("S1");
-        //s.setPosition(2, 1, 0);
-        //s.attachToNode("5");
-       zoomScene();
+       view.getCamera().setViewCenter(curNodeXYCords[0],curNodeXYCords[1], 0);//get camera 
     }
     
     private synchronized void zoomScene()
     {
         System.out.println("Zoom :"+zoomLevel);
-        view.getCamera().setViewCenter(444000,2505000, 0);//get camera
+        this.labelZoomLevel.setText(String.valueOf(zoomLevel));
         view.getCamera().setViewPercent(zoomLevel); 
     }
     
-    
-    /*
-    @Override
-    public void paintComponent(java.awt.Graphics g)
-    {
-        
-        //this.setBackground(null);
-         super.paintComponent(g);
-         g.fillRoundRect(50, 50, 8, 8, 0, 0);
-         g.drawLine(50,50,100,100);
-         g.fillRoundRect(100, 100, 8, 8, 0, 0);
-         g.drawLine(100,100,150,250);
-         g.fillRoundRect(150, 250, 8, 8, 0, 0);
-    }
-    */
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -154,133 +131,151 @@ public class Canvas extends javax.swing.JPanel //Canvas for drawing graph
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        drawPanel = new javax.swing.JPanel();
-        menuPanel = new javax.swing.JPanel();
-        nodeSearchField = new javax.swing.JTextField();
-        searchButton = new javax.swing.JButton();
+        panelDrawCanvas = new javax.swing.JPanel();
+        panelCanvasMenu = new javax.swing.JPanel();
+        textFieldSearch = new javax.swing.JTextField();
+        buttonSearch = new javax.swing.JButton();
         labelSearchNode = new javax.swing.JLabel();
-        zoomOutButton = new javax.swing.JButton();
-        zoomInButton = new javax.swing.JButton();
-        rstZoomButton = new javax.swing.JButton();
+        buttonZoomOut = new javax.swing.JButton();
+        buttonZoomIn = new javax.swing.JButton();
+        buttonResetZoom = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTextPane = new javax.swing.JTextPane();
         labelZoomControl = new javax.swing.JLabel();
+        labelZoomLevel = new javax.swing.JLabel();
+        buttonSetOrigin = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        drawPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        panelDrawCanvas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
-        drawPanel.setLayout(drawPanelLayout);
-        drawPanelLayout.setHorizontalGroup(
-            drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelDrawCanvasLayout = new javax.swing.GroupLayout(panelDrawCanvas);
+        panelDrawCanvas.setLayout(panelDrawCanvasLayout);
+        panelDrawCanvasLayout.setHorizontalGroup(
+            panelDrawCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 444, Short.MAX_VALUE)
         );
-        drawPanelLayout.setVerticalGroup(
-            drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelDrawCanvasLayout.setVerticalGroup(
+            panelDrawCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 371, Short.MAX_VALUE)
         );
 
-        menuPanel.setBackground(new java.awt.Color(255, 255, 204));
-        menuPanel.setPreferredSize(new java.awt.Dimension(160, 371));
+        panelCanvasMenu.setBackground(new java.awt.Color(255, 255, 204));
+        panelCanvasMenu.setPreferredSize(new java.awt.Dimension(160, 371));
 
-        nodeSearchField.setBackground(new java.awt.Color(255, 204, 204));
-        nodeSearchField.addFocusListener(new java.awt.event.FocusAdapter() {
+        textFieldSearch.setBackground(new java.awt.Color(255, 204, 204));
+        textFieldSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                nodeSearchFieldFocusGained(evt);
+                textFieldSearchFocusGained(evt);
             }
         });
 
-        searchButton.setBackground(new java.awt.Color(255, 204, 0));
-        searchButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        searchButton.setLabel("Search");
-        searchButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchButtonActionPerformed(evt);
-            }
-        });
+        buttonSearch.setBackground(new java.awt.Color(255, 204, 0));
+        buttonSearch.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        buttonSearch.setLabel("Search");
 
         labelSearchNode.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         labelSearchNode.setText("Search Node :");
 
-        zoomOutButton.setBackground(new java.awt.Color(255, 204, 0));
-        zoomOutButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        zoomOutButton.setText("-");
-        zoomOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonZoomOut.setBackground(new java.awt.Color(255, 204, 0));
+        buttonZoomOut.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        buttonZoomOut.setText("-");
+        buttonZoomOut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                zoomOutButtonMouseClicked(evt);
+                buttonZoomOutMouseClicked(evt);
             }
         });
 
-        zoomInButton.setBackground(new java.awt.Color(255, 204, 0));
-        zoomInButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        zoomInButton.setText("+");
-        zoomInButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonZoomIn.setBackground(new java.awt.Color(255, 204, 0));
+        buttonZoomIn.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        buttonZoomIn.setText("+");
+        buttonZoomIn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                zoomInButtonMouseClicked(evt);
+                buttonZoomInMouseClicked(evt);
             }
         });
 
-        rstZoomButton.setBackground(new java.awt.Color(255, 204, 0));
-        rstZoomButton.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
-        rstZoomButton.setText("RST");
-        rstZoomButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonResetZoom.setBackground(new java.awt.Color(255, 204, 0));
+        buttonResetZoom.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        buttonResetZoom.setText("RST");
+        buttonResetZoom.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rstZoomButtonMouseClicked(evt);
+                buttonResetZoomMouseClicked(evt);
             }
         });
 
         resultTextPane.setBackground(new java.awt.Color(255, 255, 204));
         resultTextPane.setBorder(null);
+        resultTextPane.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         resultTextPane.setSelectionColor(new java.awt.Color(153, 153, 255));
         jScrollPane1.setViewportView(resultTextPane);
 
         labelZoomControl.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        labelZoomControl.setText("Zomm Controls :");
+        labelZoomControl.setText("Zoom Controls :");
 
-        javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
-        menuPanel.setLayout(menuPanelLayout);
-        menuPanelLayout.setHorizontalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
+        labelZoomLevel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        labelZoomLevel.setText("**");
+
+        buttonSetOrigin.setBackground(new java.awt.Color(255, 204, 51));
+        buttonSetOrigin.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        buttonSetOrigin.setText("set orgn : crnt node");
+        buttonSetOrigin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonSetOriginMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelCanvasMenuLayout = new javax.swing.GroupLayout(panelCanvasMenu);
+        panelCanvasMenu.setLayout(panelCanvasMenuLayout);
+        panelCanvasMenuLayout.setHorizontalGroup(
+            panelCanvasMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCanvasMenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelCanvasMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(rstZoomButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuPanelLayout.createSequentialGroup()
-                        .addGap(0, 77, Short.MAX_VALUE)
-                        .addComponent(searchButton))
-                    .addComponent(nodeSearchField)
-                    .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addComponent(zoomOutButton)
+                    .addComponent(textFieldSearch)
+                    .addGroup(panelCanvasMenuLayout.createSequentialGroup()
+                        .addComponent(buttonZoomOut)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(zoomInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelSearchNode)
-                            .addComponent(labelZoomControl))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(buttonZoomIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCanvasMenuLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(buttonSearch))
+                    .addGroup(panelCanvasMenuLayout.createSequentialGroup()
+                        .addComponent(labelSearchNode)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonSetOrigin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelCanvasMenuLayout.createSequentialGroup()
+                        .addComponent(labelZoomControl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelZoomLevel)
+                        .addGap(12, 12, 12))
+                    .addComponent(buttonResetZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        menuPanelLayout.setVerticalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
+        panelCanvasMenuLayout.setVerticalGroup(
+            panelCanvasMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCanvasMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelSearchNode)
                 .addGap(3, 3, 3)
-                .addComponent(nodeSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchButton)
+                .addComponent(buttonSearch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonSetOrigin, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelZoomControl)
+                .addGroup(panelCanvasMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelZoomControl, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelZoomLevel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(zoomOutButton)
-                    .addComponent(zoomInButton))
+                .addGroup(panelCanvasMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rstZoomButton)
+                .addComponent(buttonResetZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -289,61 +284,123 @@ public class Canvas extends javax.swing.JPanel //Canvas for drawing graph
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelDrawCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panelCanvasMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelDrawCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelCanvasMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        // TODO add your handling code here:
-        this.resultTextPane.setEnabled(true);
-    }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void nodeSearchFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nodeSearchFieldFocusGained
+    private void textFieldSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFieldSearchFocusGained
         // TODO add your handling code here:
         this.resultTextPane.setEnabled(false);
-    }//GEN-LAST:event_nodeSearchFieldFocusGained
+    }//GEN-LAST:event_textFieldSearchFocusGained
 
-    private void zoomInButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoomInButtonMouseClicked
+    private void buttonZoomInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonZoomInMouseClicked
         // TODO add your handling code here:
         if(zoomLevel > 0.05f)
         {
             zoomLevel -= 0.05;
             zoomScene();
         }
-    }//GEN-LAST:event_zoomInButtonMouseClicked
+    }//GEN-LAST:event_buttonZoomInMouseClicked
 
-    private void zoomOutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoomOutButtonMouseClicked
+    private void buttonZoomOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonZoomOutMouseClicked
         // TODO add your handling code here:
         if(zoomLevel < 2.0f)
             zoomLevel += 0.05f;
         zoomScene();
-    }//GEN-LAST:event_zoomOutButtonMouseClicked
+    }//GEN-LAST:event_buttonZoomOutMouseClicked
 
-    private void rstZoomButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rstZoomButtonMouseClicked
+    private void buttonResetZoomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonResetZoomMouseClicked
         // TODO add your handling code here:
         zoomLevel = 1.0f;
-        zoomScene();
-    }//GEN-LAST:event_rstZoomButtonMouseClicked
+        curNodeXYCords[0] = 76.2936 ; 
+        curNodeXYCords[1] =  -9.9902 ;
+        renderScene();
+    }//GEN-LAST:event_buttonResetZoomMouseClicked
 
+    private void buttonSetOriginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonSetOriginMouseClicked
+        // TODO add your handling code here:
+         setOrigin();
+         System.out.println(curNodeXYCords[0]+" "+curNodeXYCords[1]);
+    }//GEN-LAST:event_buttonSetOriginMouseClicked
+
+    
+    @Override
+	public void viewClosed(String id) {
+		loop = false;
+	}
+
+        @Override
+	public void buttonPushed(String id) {
+		System.out.println("Button pushed on node "+id);
+	}
+
+        @Override
+	public void buttonReleased(String id) {
+		System.out.println("Button released on node "+id);
+	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel drawPanel;
+    private javax.swing.JButton buttonResetZoom;
+    private javax.swing.JButton buttonSearch;
+    private javax.swing.JButton buttonSetOrigin;
+    private javax.swing.JButton buttonZoomIn;
+    private javax.swing.JButton buttonZoomOut;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelSearchNode;
     private javax.swing.JLabel labelZoomControl;
-    private javax.swing.JPanel menuPanel;
-    private javax.swing.JTextField nodeSearchField;
-    private javax.swing.JTextPane resultTextPane;
-    private javax.swing.JButton rstZoomButton;
-    private javax.swing.JButton searchButton;
-    private javax.swing.JButton zoomInButton;
-    private javax.swing.JButton zoomOutButton;
+    private javax.swing.JLabel labelZoomLevel;
+    private javax.swing.JPanel panelCanvasMenu;
+    private javax.swing.JPanel panelDrawCanvas;
+    public javax.swing.JTextPane resultTextPane;
+    private javax.swing.JTextField textFieldSearch;
     // End of variables declaration//GEN-END:variables
+}
+
+class UpdateTimer extends Timer
+{
+    
+    public UpdateTimer(Graph G)
+    {
+        super(6000, new ActionListener() 
+                    {
+                        @Override
+                                public void actionPerformed(ActionEvent e)
+                                {
+                                    
+                                    for(Edge edg : G.getEachEdge())
+                                    {
+                                        double speedMax = edg.getNumber("speedMax") / 130.0;
+                                        edg.setAttribute("ui.color", speedMax);
+                                    }
+                                }
+                    }
+            );
+    }  
+}
+
+class UpdateEdgeColor extends Timer
+{
+    public UpdateEdgeColor(Graph G)
+    {
+        super(3000, new ActionListener() 
+                    {
+                        Random rnd = new Random();
+                        @Override
+                                public void actionPerformed(ActionEvent e)
+                                {
+                                    for(Node nd : G.getEachNode())
+                                    {                                           
+                                        nd.setAttribute("ui.color", rnd.nextDouble());
+                                    }
+                                }
+                    }
+            );
+    }  
 }

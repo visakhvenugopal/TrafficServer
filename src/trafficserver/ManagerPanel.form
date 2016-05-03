@@ -16,13 +16,319 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="seperatorMain" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="labelTitle" min="-2" pref="120" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="labelNoNodes" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelManageNode" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                              <Component id="labelNoOfActiveNodes" min="-2" pref="49" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="labelGlobalCongestionIndicator" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="labelGlobalCongestionIndicatorValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Component id="separatorSubVertical" min="-2" pref="10" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="labelLocalCongestion" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="labelLocalCongestionValue" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="checkBoxCongestionValueOverride" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="labelGeoLocation" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="labelNoOfVehicles" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                              <Component id="comboBoxSelectNode" min="-2" pref="59" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="labelNoOfVehiclesValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="labelSelectedNodeName" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                          <Component id="labelGeoLocationValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="labelTimeDependentDelay" min="-2" max="-2" attributes="0"/>
+                                          <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
+                                          <Component id="textFieldSetTimeDependentDelay" min="-2" pref="28" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="178" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="labelTitle" min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Component id="seperatorMain" min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labelGlobalCongestionIndicator" alignment="1" min="-2" pref="14" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelNoNodes" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelNoOfActiveNodes" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelGlobalCongestionIndicatorValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="comboBoxSelectNode" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
+                          <Component id="labelManageNode" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelSelectedNodeName" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="separatorSubVertical" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="labelGeoLocation" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelGeoLocationValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="labelNoOfVehicles" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelNoOfVehiclesValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="labelLocalCongestion" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelLocalCongestionValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="checkBoxCongestionValueOverride" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="textFieldSetTimeDependentDelay" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelTimeDependentDelay" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="47" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="labelTitle">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Management"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="seperatorMain">
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelNoNodes">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="No of  Nodes Active :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelNoOfActiveNodes">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="10"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelGlobalCongestionIndicator">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Global Congestion :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelGlobalCongestionIndicatorValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="66%"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelManageNode">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Node ID"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="comboBoxSelectNode">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="30">
+            <StringItem index="0" value="101"/>
+            <StringItem index="1" value="102"/>
+            <StringItem index="2" value="103"/>
+            <StringItem index="3" value="104"/>
+            <StringItem index="4" value="105"/>
+            <StringItem index="5" value="106"/>
+            <StringItem index="6" value="107"/>
+            <StringItem index="7" value="108"/>
+            <StringItem index="8" value="109"/>
+            <StringItem index="9" value="110"/>
+            <StringItem index="10" value="111"/>
+            <StringItem index="11" value="112"/>
+            <StringItem index="12" value="113"/>
+            <StringItem index="13" value="114"/>
+            <StringItem index="14" value="115"/>
+            <StringItem index="15" value="116"/>
+            <StringItem index="16" value="117"/>
+            <StringItem index="17" value="118"/>
+            <StringItem index="18" value="119"/>
+            <StringItem index="19" value="120"/>
+            <StringItem index="20" value="121"/>
+            <StringItem index="21" value="122"/>
+            <StringItem index="22" value="123"/>
+            <StringItem index="23" value="124"/>
+            <StringItem index="24" value="125"/>
+            <StringItem index="25" value="126"/>
+            <StringItem index="26" value="127"/>
+            <StringItem index="27" value="128"/>
+            <StringItem index="28" value="129"/>
+            <StringItem index="29" value="130"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="comboBoxSelectNodeItemStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxSelectNodeActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelSelectedNodeName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ernakulam"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="separatorSubVertical">
+      <Properties>
+        <Property name="orientation" type="int" value="1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelNoOfVehicles">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="No Of Vehicles"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelNoOfVehiclesValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="--"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelLocalCongestion">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Congestion Index"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelLocalCongestionValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="57%"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelGeoLocation">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Geo Location"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkBoxCongestionValueOverride">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Override"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="checkBoxCongestionValueOverrideStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBoxCongestionValueOverrideActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelGeoLocationValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="78.05LT - 9.456LN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelSetLocalCongestion">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Congestion Level"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSlider" name="sliderAdjustCongestionValue">
+      <Properties>
+        <Property name="paintLabels" type="boolean" value="true"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelTimeDependentDelay">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="99" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Time Dependent Delay"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="textFieldSetTimeDependentDelay">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textFieldSetTimeDependentDelayActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
 </Form>

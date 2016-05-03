@@ -47,6 +47,7 @@ public class LoginForm extends javax.swing.JFrame {
         labelMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 153, 255));
         setMaximumSize(new java.awt.Dimension(400, 220));
         setPreferredSize(new java.awt.Dimension(400, 220));
         setResizable(false);
@@ -65,9 +66,11 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        labelTitle.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 24)); // NOI18N
+        labelTitle.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        labelTitle.setForeground(new java.awt.Color(255, 153, 0));
         labelTitle.setText("ITCaS");
 
+        loginButton.setBackground(new java.awt.Color(0, 153, 255));
         loginButton.setForeground(new java.awt.Color(0, 102, 51));
         loginButton.setText("LOGIN");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
@@ -93,7 +96,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addComponent(labelTitle)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(50, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +131,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addComponent(loginButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -150,7 +153,11 @@ public class LoginForm extends javax.swing.JFrame {
         {
             System.out.println("Welcome..!");
             java.awt.EventQueue.invokeLater(() -> {
-            new TrafficServer().setVisible(true);
+                try {
+                    new TrafficServer().setVisible(true);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             this.setVisible(false);});
         }
         if(attempt > 3)

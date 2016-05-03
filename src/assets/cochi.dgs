@@ -1,0 +1,197 @@
+DGS004
+"Cochi" 0 0
+cg  "ui.multigraph":"true"
+
+an "101"
+cn "101"  "ui.label":"Ernakulam South"
+cn "101"  "z_level":0
+cn "101"  "xyz":76.2922,-10.0046,0
+
+an "102"
+cn "102"  "ui.label":"Perumanoor"
+cn "102"  "z_level":0
+cn "102"  "xyz":76.2936,-10.0214,0
+
+an "103"
+cn "103"  "ui.label":"NH66"
+cn "103"  "z_level":0
+cn "103"  "xyz":76.3226,-10.0044,0
+
+an "104"
+cn "104"  "ui.label":"Kadavanthra"
+cn "104"  "z_level":0
+cn "104"  "xyz":76.2936,-9.9902,0
+
+an "105"
+cn "105"  "ui.label":"Ernakulam"
+cn "105"  "z_level":0
+cn "105"  "xyz":76.2886,-9.9814,0
+
+an "106"
+cn "106"  "ui.label":"Kaloor"
+cn "106"  "z_level":0
+cn "106"  "xyz":76.2952,-9.9750,0
+
+an "107"
+cn "107"  "ui.label":"Palarivattom"
+cn "107"  "z_level":0
+cn "107"  "xyz":76.3092,-9.9662,0
+
+an "108"
+cn "108"  "ui.label":"Edappally"
+cn "108"  "z_level":0
+cn "108"  "xyz":76.3076,-9.9570,0
+
+an "109"
+cn "109"  "ui.label":"Kakkanad"
+cn "109"  "z_level":0
+cn "109"  "xyz":76.3470,-9.9508,0
+
+an "110"
+cn "110"  "ui.label":"Kakkanad"
+cn "110"  "z_level":0
+cn "110"  "xyz":76.3470,-9.9508,0
+
+an "111"
+cn "111"  "ui.label":"Vaduthala"
+cn "111"  "z_level":0
+cn "111"  "xyz":76.2206,-9.9570,0
+
+an "112"
+cn "112"  "ui.label":"Vallarpadam"
+cn "112"  "z_level":0
+cn "112"  "xyz":76.2508,-9.9780,0
+
+an "113"
+cn "113"  "ui.label":"Willingdon"
+cn "113"  "z_level":0
+cn "113"  "xyz":76.2760,-10.0150,0
+
+an "114"
+cn "114"  "ui.label":"Fortkochi"
+cn "114"  "z_level":0
+cn "114"  "xyz":76.2422,-10.0240,0
+
+an "115"
+cn "115"  "ui.label":"Gosri"
+cn "115"  "z_level":0
+cn "115"  "xyz":76.2418,-9.9870,0
+
+an "116"
+cn "116"  "ui.label":"NH85"
+cn "116"  "z_level":0
+cn "116"  "xyz":76.3116,-10.0328,0
+
+an "117"
+cn "117"  "ui.label":"Kannankulangara"
+cn "117"  "z_level":0
+cn "117"  "xyz":76.3226,-10.0324,0
+
+an "118"
+cn "118"  "ui.label":"Eroor Road"
+cn "118"  "z_level":0
+cn "118"  "xyz":76.3358,-10.0294,0
+
+an "119"
+cn "119"  "ui.label":"Refinery Road"
+cn "119"  "z_level":0
+cn "119"  "xyz":76.3518,-10.0294,0
+
+an "120"
+cn "120"  "ui.label":"Chilavannoor Road"
+cn "120"  "z_level":0
+cn "120"  "xyz":76.3804,-10.0246,0
+
+an "121"
+cn "121"  "ui.label":"Kundannoor"
+cn "121"  "z_level":0
+cn "121"  "xyz":76.3648,-10.0188,0
+
+an "122"
+cn "122"  "ui.label":"Sahodaran Ayyappan Road"
+cn "122"  "z_level":0
+cn "122"  "xyz":76.3606,-10.0220,0
+
+an "123"
+cn "123"  "ui.label":"Thoppumpadi"
+cn "123"  "z_level":0
+cn "123"  "xyz":76.3448,-10.0162,0
+
+an "124"
+cn "124"  "ui.label":"Shipyard Quarters"
+cn "124"  "z_level":0
+cn "124"  "xyz":76.3587,-10.0220,0
+
+an "125"
+cn "125"  "ui.label":"Jos Junction"
+cn "125"  "z_level":0
+cn "125"  "xyz":76.3732,-10.0098,0
+
+an "126"
+cn "126"  "ui.label":"DH Ground"
+cn "126"  "z_level":0
+cn "126"  "xyz":76.3674,-10.0172,0
+
+an "127"
+cn "127"  "ui.label":"TD Road"
+cn "127"  "z_level":0
+cn "127"  "xyz":76.3364,-10.0192,0
+
+an "128"
+cn "128"  "ui.label":"Ravipuram Road"
+cn "128"  "z_level":0
+cn "128"  "xyz":76.3230,-10.0046,0
+
+an "129"
+cn "129"  "ui.label":"South Overbridge"
+cn "129"  "z_level":0
+cn "129"  "xyz":76.3038,-10.0022,0
+
+an "130"
+cn "130"  "ui.label":"Medical Trust"
+cn "130"  "z_level":0
+cn "130"  "xyz":76.3190,-9.9938,0
+
+ae "501" "101" "102" weight:0.47
+ae "502" "101" "103" weight:3.39
+ae "503" "101" "104" weight:11.66
+ae "504" "101" "129" weight:1.30
+ae "505" "102" "113" weight:1.97
+ae "506" "102" "114" weight:5.76
+ae "507" "103" "110" weight:3.68
+ae "508" "104" "105" weight:0.63
+ae "509" "105" "106" weight:0.78
+ae "510" "106" "107" weight:1.58
+ae "511" "107" "108" weight:1.00
+ae "512" "107" "109" weight:4.25
+ae "513" "105" "111" weight:7.60
+ae "514" "105" "112" weight:4.20
+ae "515" "111" "112" weight:3.42
+ae "516" "112" "115" weight:1.03
+ae "517" "116" "117" weight:1.23
+ae "518" "117" "118" weight:1.48
+ae "519" "118" "119" weight:1.79
+ae "520" "119" "127" weight:0.28
+ae "521" "110" "119" weight:0.39
+ae "522" "110" "122" weight:0.61
+ae "523" "110" "124" weight:0.40
+ae "524" "110" "123" weight:1.18
+ae "525" "121" "120" weight:1.75
+ae "526" "121" "127" weight:1.46
+ae "527" "121" "122" weight:0.48
+ae "528" "125" "126" weight:0.68
+ae "529" "122" "125" weight:1.44
+ae "530" "125" "124" weight:1.65
+ae "531" "122" "123" weight:1.70
+ae "532" "123" "127" weight:0.94
+ae "533" "127" "128" weight:1.54
+ae "534" "128" "129" weight:2.14
+ae "535" "128" "130" weight:0.53
+
+
+
+
+
+
+
+

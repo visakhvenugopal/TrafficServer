@@ -5,8 +5,12 @@
  */
 package trafficserver;
 
-
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javax.swing.Timer;
 
 
 /**
@@ -19,29 +23,70 @@ public class TrafficServer extends javax.swing.JFrame
     //App Variables
     
     Canvas painter;
+    ManagerPanel manager;
+    StatisticsPanel analyst;
+    ServerAdmin serverAdmin = null;
     private javax.swing.JButton currentMenu = null;
+    private javax.swing.JPanel currentPanel = null;
     private boolean isServiceActive = false ; 
     /**
      * Creates new form TrafficServer
      */
-    public TrafficServer() 
+    public TrafficServer() throws InterruptedException 
     {
         //LoginForm LF= new LoginForm();
         
         initComponents();
         
+        //Menu initianlization
+        serverAdmin = new ServerAdmin();
         painter = new Canvas();
-        currentMenu = manageButton;
-        this.manageButton.setBackground(new java.awt.Color(0,204,204));       
-        this.serviceStateButton.setBackground(java.awt.Color.GREEN);
-        this.serviceStateButton.setText("START");        
+        manager = new ManagerPanel();
+        analyst = new StatisticsPanel();
+        
+        painter.setVisible(false);
+        manager.setVisible(false);
+        analyst.setVisible(false);
+              
+        currentMenu = buttonManage;
+        currentPanel = manager;
+       
+        this.buttonManage.setBackground(new java.awt.Color(0,204,204));       
+        this.buttonServiceState.setBackground(java.awt.Color.GREEN);
+        this.buttonServiceState.setText("START");
+        
+        this.panelBody.add(manager);
+        this.panelBody.add(painter);
+        this.panelBody.add(analyst);
+        
+        manager.setVisible(true);
+        this.panelBody.updateUI();
+        
+        Calendar now = Calendar.getInstance();
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        new Timer(1000, new ActionListener() {
+        @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    Calendar now = Calendar.getInstance();
+                    labelTimeDisplay.setText(dateFormat.format(now.getTime()));
+                }
+            }).start();
+        
+        
     }
     
-    private void menuSelected(javax.swing.JButton current)
+    private void menuSelected(javax.swing.JButton currentBtn,javax.swing.JPanel currentPnl)
     {
         currentMenu.setBackground(new java.awt.Color(255,204,0));
-        currentMenu = current;
+        currentMenu = currentBtn;
         currentMenu.setBackground(new java.awt.Color(0,204,204));
+        
+        currentPanel.setVisible(false);
+        currentPanel = currentPnl;
+        currentPanel.setVisible(true);
+        
+        this.panelBody.updateUI();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,17 +98,16 @@ public class TrafficServer extends javax.swing.JFrame
     private void initComponents() {
 
         Pnl_Main = new javax.swing.JPanel();
-        Pnl_Head = new javax.swing.JPanel();
-        Lbl_Name = new javax.swing.JLabel();
-        Lbl_NameDef = new javax.swing.JLabel();
-        Pnl_Nav = new javax.swing.JPanel();
-        manageButton = new javax.swing.JButton();
-        graphViewButton = new javax.swing.JButton();
-        statiticsButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        Pnl_Body = new javax.swing.JPanel();
-        serviceStateButton = new javax.swing.JButton();
+        panelHead = new javax.swing.JPanel();
+        labelTitle = new javax.swing.JLabel();
+        labelTitleDef = new javax.swing.JLabel();
+        labelTimeDisplay = new javax.swing.JLabel();
+        panelNavigation = new javax.swing.JPanel();
+        buttonManage = new javax.swing.JButton();
+        buttonGraphView = new javax.swing.JButton();
+        buttonStatitics = new javax.swing.JButton();
+        panelBody = new javax.swing.JPanel();
+        buttonServiceState = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(153, 153, 153));
@@ -76,76 +120,89 @@ public class TrafficServer extends javax.swing.JFrame
 
         Pnl_Main.setBackground(new java.awt.Color(51, 51, 51));
 
-        Pnl_Head.setBackground(new java.awt.Color(102, 102, 102));
+        panelHead.setBackground(new java.awt.Color(102, 102, 102));
+        panelHead.setForeground(new java.awt.Color(255, 255, 255));
 
-        Lbl_Name.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 48)); // NOI18N
-        Lbl_Name.setForeground(new java.awt.Color(255, 153, 0));
-        Lbl_Name.setText("ITcaS");
+        labelTitle.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 48)); // NOI18N
+        labelTitle.setForeground(new java.awt.Color(255, 153, 0));
+        labelTitle.setText("ITcaS");
 
-        Lbl_NameDef.setForeground(new java.awt.Color(255, 255, 255));
-        Lbl_NameDef.setText(" Intelligent Traffic Congestion Avoidence System");
+        labelTitleDef.setForeground(new java.awt.Color(255, 255, 255));
+        labelTitleDef.setText(" Intelligent Traffic Congestion Avoidence System");
 
-        javax.swing.GroupLayout Pnl_HeadLayout = new javax.swing.GroupLayout(Pnl_Head);
-        Pnl_Head.setLayout(Pnl_HeadLayout);
-        Pnl_HeadLayout.setHorizontalGroup(
-            Pnl_HeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Pnl_HeadLayout.createSequentialGroup()
+        labelTimeDisplay.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        labelTimeDisplay.setForeground(new java.awt.Color(0, 255, 204));
+        labelTimeDisplay.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelTimeDisplay.setText("time");
+        labelTimeDisplay.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        labelTimeDisplay.setAlignmentX(1.0F);
+
+        javax.swing.GroupLayout panelHeadLayout = new javax.swing.GroupLayout(panelHead);
+        panelHead.setLayout(panelHeadLayout);
+        panelHeadLayout.setHorizontalGroup(
+            panelHeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHeadLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(Pnl_HeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Lbl_NameDef, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Lbl_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(433, Short.MAX_VALUE))
+                .addGroup(panelHeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelHeadLayout.createSequentialGroup()
+                        .addComponent(labelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelHeadLayout.createSequentialGroup()
+                        .addComponent(labelTitleDef, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
+                        .addComponent(labelTimeDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
-        Pnl_HeadLayout.setVerticalGroup(
-            Pnl_HeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, Pnl_HeadLayout.createSequentialGroup()
+        panelHeadLayout.setVerticalGroup(
+            panelHeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelHeadLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Lbl_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Lbl_NameDef)
+                .addComponent(labelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelHeadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelTitleDef)
+                    .addComponent(labelTimeDisplay))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        Pnl_Nav.setOpaque(false);
-        Pnl_Nav.setLayout(new java.awt.GridLayout(5, 1));
+        panelNavigation.setOpaque(false);
+        panelNavigation.setLayout(new java.awt.GridLayout(3, 1));
 
-        manageButton.setBackground(new java.awt.Color(255, 204, 0));
-        manageButton.setText("Manage Network");
-        manageButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonManage.setBackground(new java.awt.Color(255, 204, 0));
+        buttonManage.setText("Manage Network");
+        buttonManage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                manageButtonMouseClicked(evt);
+                buttonManageMouseClicked(evt);
             }
         });
-        Pnl_Nav.add(manageButton);
+        panelNavigation.add(buttonManage);
 
-        graphViewButton.setBackground(new java.awt.Color(255, 204, 0));
-        graphViewButton.setText("Map View");
-        graphViewButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonGraphView.setBackground(new java.awt.Color(255, 204, 0));
+        buttonGraphView.setText("Map View");
+        buttonGraphView.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                graphViewButtonMouseClicked(evt);
+                buttonGraphViewMouseClicked(evt);
             }
         });
-        Pnl_Nav.add(graphViewButton);
+        panelNavigation.add(buttonGraphView);
 
-        statiticsButton.setBackground(new java.awt.Color(255, 204, 0));
-        statiticsButton.setText("jButton3");
-        Pnl_Nav.add(statiticsButton);
-
-        jButton4.setBackground(new java.awt.Color(255, 204, 0));
-        jButton4.setText("jButton4");
-        Pnl_Nav.add(jButton4);
-
-        jButton5.setBackground(new java.awt.Color(255, 204, 0));
-        jButton5.setText("jButton5");
-        Pnl_Nav.add(jButton5);
-
-        Pnl_Body.setBackground(new java.awt.Color(153, 153, 153));
-        Pnl_Body.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 51)));
-        Pnl_Body.setLayout(new java.awt.GridLayout(1, 1));
-
-        serviceStateButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonStatitics.setBackground(new java.awt.Color(255, 204, 0));
+        buttonStatitics.setLabel("Statitics");
+        buttonStatitics.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                serviceStateButtonMouseClicked(evt);
+                buttonStatiticsMouseClicked(evt);
+            }
+        });
+        panelNavigation.add(buttonStatitics);
+
+        panelBody.setBackground(new java.awt.Color(153, 153, 153));
+        panelBody.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 51)));
+        panelBody.setForeground(new java.awt.Color(255, 255, 255));
+        panelBody.setLayout(new javax.swing.OverlayLayout(panelBody));
+
+        buttonServiceState.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonServiceStateMouseClicked(evt);
             }
         });
 
@@ -156,31 +213,31 @@ public class TrafficServer extends javax.swing.JFrame
             .addGroup(Pnl_MainLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(Pnl_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Pnl_Head, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelHead, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(Pnl_MainLayout.createSequentialGroup()
                         .addGroup(Pnl_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Pnl_Nav, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                            .addComponent(serviceStateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(panelNavigation, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(buttonServiceState, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(Pnl_Body, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(panelBody, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(15, 15, 15))
         );
         Pnl_MainLayout.setVerticalGroup(
             Pnl_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Pnl_MainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Pnl_Head, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelHead, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(Pnl_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Pnl_MainLayout.createSequentialGroup()
-                        .addComponent(Pnl_Nav, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panelNavigation, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(serviceStateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Pnl_Body, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
+                        .addComponent(buttonServiceState, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelBody, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
                 .addGap(15, 15, 15))
         );
 
-        Pnl_Nav.getAccessibleContext().setAccessibleName("");
+        panelNavigation.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -196,50 +253,59 @@ public class TrafficServer extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void graphViewButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_graphViewButtonMouseClicked
+    private void buttonGraphViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonGraphViewMouseClicked
         // TODO add your handling code here:
-        if(currentMenu != graphViewButton)
+        if(currentMenu != buttonGraphView)
         {
-            menuSelected(graphViewButton);
-            updateGraphView();
+            menuSelected(buttonGraphView,painter);
+            //updateGraphView();
         }       
-    }//GEN-LAST:event_graphViewButtonMouseClicked
+    }//GEN-LAST:event_buttonGraphViewMouseClicked
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         // TODO add your handling code here:
-        this.Pnl_Body.updateUI();
+        this.panelBody.updateUI();
     }//GEN-LAST:event_formComponentResized
 
-    private void serviceStateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_serviceStateButtonMouseClicked
+    private void buttonServiceStateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonServiceStateMouseClicked
         // TODO add your handling code here:
         if(isServiceActive)
-        {   this.serviceStateButton.setText("START");
-            this.serviceStateButton.setBackground(java.awt.Color.GREEN);
+        {   this.buttonServiceState.setText("START");
+            this.buttonServiceState.setBackground(java.awt.Color.GREEN);
             isServiceActive = !isServiceActive;
         }
         else
         {
-            this.serviceStateButton.setText("STOP");
-            this.serviceStateButton.setBackground(java.awt.Color.RED);
+            this.buttonServiceState.setText("STOP");
+            this.buttonServiceState.setBackground(java.awt.Color.RED);
+            serverAdmin.startCommunication();
             isServiceActive = !isServiceActive;
         }
         
-    }//GEN-LAST:event_serviceStateButtonMouseClicked
+    }//GEN-LAST:event_buttonServiceStateMouseClicked
 
-    private void manageButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_manageButtonMouseClicked
+    private void buttonManageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonManageMouseClicked
         // TODO add your handling code here:
-        if(currentMenu != manageButton)
+        if(currentMenu != buttonManage)
         {
-            menuSelected(manageButton);
+            menuSelected(buttonManage,manager);
         } 
-    }//GEN-LAST:event_manageButtonMouseClicked
+    }//GEN-LAST:event_buttonManageMouseClicked
+
+    private void buttonStatiticsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonStatiticsMouseClicked
+        // TODO add your handling code here:
+        if(currentMenu != buttonStatitics)
+        {
+            menuSelected(buttonStatitics,analyst);
+        } 
+    }//GEN-LAST:event_buttonStatiticsMouseClicked
 
     private void updateGraphView()
     {
-        Pnl_Body.removeAll();
-        Pnl_Body.add(painter);
+        panelBody.removeAll();
+        panelBody.add(painter);
         painter.setVisible(true);
-        Pnl_Body.updateUI();
+        panelBody.updateUI();
        
     }
     /**
@@ -278,17 +344,16 @@ public class TrafficServer extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Lbl_Name;
-    private javax.swing.JLabel Lbl_NameDef;
-    private javax.swing.JPanel Pnl_Body;
-    private javax.swing.JPanel Pnl_Head;
     private javax.swing.JPanel Pnl_Main;
-    private javax.swing.JPanel Pnl_Nav;
-    private javax.swing.JButton graphViewButton;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton manageButton;
-    private javax.swing.JButton serviceStateButton;
-    private javax.swing.JButton statiticsButton;
+    private javax.swing.JButton buttonGraphView;
+    private javax.swing.JButton buttonManage;
+    private javax.swing.JButton buttonServiceState;
+    private javax.swing.JButton buttonStatitics;
+    private javax.swing.JLabel labelTimeDisplay;
+    private javax.swing.JLabel labelTitle;
+    private javax.swing.JLabel labelTitleDef;
+    private javax.swing.JPanel panelBody;
+    private javax.swing.JPanel panelHead;
+    private javax.swing.JPanel panelNavigation;
     // End of variables declaration//GEN-END:variables
 }
