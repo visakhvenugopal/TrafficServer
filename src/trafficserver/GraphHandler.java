@@ -59,7 +59,8 @@ public class GraphHandler {
             int[] nearestNodes = null;
             
             nearestNodes = db.getNearestNodes(startLatitude, startLongitude, endLatitude, endLongitude);
-            System.out.println(nearestNodes);
+            System.out.println("route -> "+nearestNodes);
+            
             populateNodeMap(nearestNodes[0], nearestNodes[1]);
             
             return returnRout(nearestNodes[0], nearestNodes[1]);
@@ -287,6 +288,8 @@ public class GraphHandler {
 
     private Message.Builder returnRout(int startNode, int endNode) throws IOException {
         try {
+            
+            TrafficServer.aStarAlgorithm.aStarPath(String.valueOf(startNode),String.valueOf(endNode));
             System.out.println("Inside returnRout..");
             int nodeId = endNode;
             int nodeCount = 0;

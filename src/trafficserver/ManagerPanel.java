@@ -5,6 +5,8 @@
  */
 package trafficserver;
 
+import org.graphstream.graph.Node;
+
 /**
  *
  * @author Visakh Venugopal
@@ -15,13 +17,16 @@ public class ManagerPanel extends javax.swing.JPanel {
      * Creates new form ManagerPanel
      */
     
+    boolean []overrideState;
     
     public ManagerPanel()
     {
        
         initComponents();
+        overrideState = new boolean[30];
+        for(int i=0 ;i<30;i++)
+            overrideState[i] = false;
         sliderAdjustCongestionValue.setEnabled(false);
-        textFieldSetTimeDependentDelay.setEnabled(false);
     }
 
     /**
@@ -43,8 +48,6 @@ public class ManagerPanel extends javax.swing.JPanel {
         comboBoxSelectNode = new javax.swing.JComboBox();
         labelSelectedNodeName = new javax.swing.JLabel();
         separatorSubVertical = new javax.swing.JSeparator();
-        labelNoOfVehicles = new javax.swing.JLabel();
-        labelNoOfVehiclesValue = new javax.swing.JLabel();
         labelLocalCongestion = new javax.swing.JLabel();
         labelLocalCongestionValue = new javax.swing.JLabel();
         labelGeoLocation = new javax.swing.JLabel();
@@ -52,8 +55,6 @@ public class ManagerPanel extends javax.swing.JPanel {
         labelGeoLocationValue = new javax.swing.JLabel();
         labelSetLocalCongestion = new javax.swing.JLabel();
         sliderAdjustCongestionValue = new javax.swing.JSlider();
-        labelTimeDependentDelay = new javax.swing.JLabel();
-        textFieldSetTimeDependentDelay = new javax.swing.JTextField();
 
         labelTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         labelTitle.setText("Management");
@@ -87,11 +88,6 @@ public class ManagerPanel extends javax.swing.JPanel {
 
         separatorSubVertical.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        labelNoOfVehicles.setForeground(new java.awt.Color(153, 0, 51));
-        labelNoOfVehicles.setText("No Of Vehicles");
-
-        labelNoOfVehiclesValue.setText("--");
-
         labelLocalCongestion.setForeground(new java.awt.Color(153, 0, 51));
         labelLocalCongestion.setText("Congestion Index");
 
@@ -119,15 +115,11 @@ public class ManagerPanel extends javax.swing.JPanel {
 
         sliderAdjustCongestionValue.setPaintLabels(true);
         sliderAdjustCongestionValue.setToolTipText("");
+        sliderAdjustCongestionValue.setValue(0);
         sliderAdjustCongestionValue.setEnabled(false);
-
-        labelTimeDependentDelay.setForeground(new java.awt.Color(153, 0, 51));
-        labelTimeDependentDelay.setText("Time Dependent Delay");
-
-        textFieldSetTimeDependentDelay.setToolTipText("");
-        textFieldSetTimeDependentDelay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textFieldSetTimeDependentDelayActionPerformed(evt);
+        sliderAdjustCongestionValue.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                sliderAdjustCongestionValueMouseReleased(evt);
             }
         });
 
@@ -170,25 +162,18 @@ public class ManagerPanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(labelGeoLocation)
-                                            .addComponent(labelNoOfVehicles)
                                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                 .addGap(26, 26, 26)
                                                 .addComponent(comboBoxSelectNode, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGap(14, 14, 14)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(labelNoOfVehiclesValue)
                                             .addComponent(labelSelectedNodeName, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(labelGeoLocationValue)))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(labelTimeDependentDelay)
-                                            .addComponent(labelSetLocalCongestion))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(sliderAdjustCongestionValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textFieldSetTimeDependentDelay, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(184, 184, 184)))
-                        .addContainerGap(178, Short.MAX_VALUE))))
+                                        .addComponent(labelSetLocalCongestion)
+                                        .addGap(36, 36, 36)
+                                        .addComponent(sliderAdjustCongestionValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(362, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,11 +203,7 @@ public class ManagerPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelGeoLocation)
                             .addComponent(labelGeoLocationValue))
-                        .addGap(61, 61, 61)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelNoOfVehicles)
-                            .addComponent(labelNoOfVehiclesValue))
-                        .addGap(13, 13, 13)
+                        .addGap(88, 88, 88)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelLocalCongestion)
                             .addComponent(labelLocalCongestionValue))
@@ -232,11 +213,7 @@ public class ManagerPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(sliderAdjustCongestionValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelSetLocalCongestion))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(textFieldSetTimeDependentDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTimeDependentDelay))
-                        .addGap(0, 47, Short.MAX_VALUE)))
+                        .addGap(0, 73, Short.MAX_VALUE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -251,24 +228,21 @@ public class ManagerPanel extends javax.swing.JPanel {
 
     private void checkBoxCongestionValueOverrideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkBoxCongestionValueOverrideStateChanged
         // TODO add your handling code here:
-        
+        int nodeID = Integer.valueOf((String)comboBoxSelectNode.getSelectedItem());
+        int stateIndex = nodeID - 101;
         if(checkBoxCongestionValueOverride.isSelected())
         {
             sliderAdjustCongestionValue.setEnabled(true);
-            textFieldSetTimeDependentDelay.setEnabled(true);
+            overrideState[stateIndex] = true;
         }
             
         else
         {
             sliderAdjustCongestionValue.setEnabled(false);
-            textFieldSetTimeDependentDelay.setEnabled(false);
+            overrideState[stateIndex] = false;
         }
             
     }//GEN-LAST:event_checkBoxCongestionValueOverrideStateChanged
-
-    private void textFieldSetTimeDependentDelayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldSetTimeDependentDelayActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldSetTimeDependentDelayActionPerformed
 
     private void comboBoxSelectNodeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxSelectNodeItemStateChanged
         // TODO add your handling code here:
@@ -278,8 +252,19 @@ public class ManagerPanel extends javax.swing.JPanel {
         labelSelectedNodeName.setText(sel.getNodeName());
         labelGeoLocationValue.setText(sel.getLat()+":"+sel.getLon());
         labelLocalCongestionValue.setText(String.valueOf(sel.getCongestionIndex()));
+        int stateIndex = nodeID -101;
+        sliderAdjustCongestionValue.setEnabled(overrideState[stateIndex]);
+        checkBoxCongestionValueOverride.setSelected(overrideState[stateIndex]);
         
     }//GEN-LAST:event_comboBoxSelectNodeItemStateChanged
+
+    private void sliderAdjustCongestionValueMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderAdjustCongestionValueMouseReleased
+        // TODO add your handling code here:
+        String nodeID = (String)comboBoxSelectNode.getSelectedItem();
+        Node node = Canvas.graph.getNode(nodeID);
+        System.out.println(node.getLabel("ui.label"));
+        node.setAttribute("ui.color",sliderAdjustCongestionValue.getValue()/100);
+    }//GEN-LAST:event_sliderAdjustCongestionValueMouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -288,21 +273,17 @@ public class ManagerPanel extends javax.swing.JPanel {
     private javax.swing.JLabel labelGeoLocation;
     private javax.swing.JLabel labelGeoLocationValue;
     private javax.swing.JLabel labelGlobalCongestionIndicator;
-    private javax.swing.JLabel labelGlobalCongestionIndicatorValue;
+    public static javax.swing.JLabel labelGlobalCongestionIndicatorValue;
     private javax.swing.JLabel labelLocalCongestion;
     private javax.swing.JLabel labelLocalCongestionValue;
     private javax.swing.JLabel labelManageNode;
     private javax.swing.JLabel labelNoNodes;
     private javax.swing.JLabel labelNoOfActiveNodes;
-    private javax.swing.JLabel labelNoOfVehicles;
-    private javax.swing.JLabel labelNoOfVehiclesValue;
     private javax.swing.JLabel labelSelectedNodeName;
     private javax.swing.JLabel labelSetLocalCongestion;
-    private javax.swing.JLabel labelTimeDependentDelay;
     private javax.swing.JLabel labelTitle;
     private javax.swing.JSeparator separatorSubVertical;
     private javax.swing.JSeparator seperatorMain;
     private javax.swing.JSlider sliderAdjustCongestionValue;
-    private javax.swing.JTextField textFieldSetTimeDependentDelay;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.ElementNotFoundException;
@@ -33,19 +36,19 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
 
     //variables
     
-    private View view = null;
-    private Graph graph = null;
-    private Viewer viewer = null;
-    private SpriteManager sMan = null;
+    static private View view = null;
+    static Graph graph = null;
+    static private Viewer viewer = null;
+    static private SpriteManager sMan = null;
     private int nodeCount = 2;
     private int edgeCount = 2;
     private Random rnd;
     private float zoomLevel = 1.0f;
     protected boolean loop = true;
-    public double curNodeXYCords[] = { 76.2936 , -9.9902};
+    public double curNodeXYCords[] = { 76.323 , -10.0046};
     
     
-    public Canvas() throws InterruptedException 
+    public Canvas()
     {
         initComponents();
         this.panelDrawCanvas.setLayout(new BorderLayout());
@@ -57,24 +60,51 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
         graph.addAttribute("ui.stylesheet", "graph { fill-color: grey; }");
         graph.addAttribute("ui.stylesheet", "node {\n" + 
                                             "    size: 10px;\n" +
-                                            "    fill-mode: dyn-plain;\n" +
-                                            "    fill-color: #222, #555, green, red ;\n" +
-                                            "    text-mode: normal ;\n" +
+                                            "    fill-mode : dyn-plain;\n" +
+                                            "    fill-color: green, red ;\n" +
+                                            "    text-mode : normal ;\n" +
                                             "    z-index: 0;\n" +
                                             "}\n" +
                                             "edge {\n" +
                                             "    shape: line;\n" +
-                                            "    fill-mode: dyn-plain;\n" +
-                                            "    fill-color: #222, #555, green, red ;\n" +
+                                            "    fill-mode : dyn-plain;\n" +
+                                            "    fill-color: green, red ;\n" +
                                             "    arrow-size: 6px, 4px;\n" +
                                             "}"+
                                             "node:clicked{fill-color:black;}");
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
         try {
-		graph.read("D:\\Projects\\NetBeans\\TrafficServer\\src\\assets\\cochi.dgs");
-	} 
-        catch(IOException | GraphParseException | ElementNotFoundException e) 
+                graph.read("D:\\Projects\\NetBeans\\TrafficServer\\src\\assets\\cochi.dgs");
+                /*
+                graph.setAttribute("ui.multigraph", true);
+                Set<Integer> keys = GraphHandler.nodeMap.keySet();
+                for(int key : keys)
+                {
+                RNode node = GraphHandler.nodeMap.get(key);
+               
+                String id = String.valueOf(node.id);
+                graph.addNode(id);
+                graph.getNode(id).addAttribute("ui.label",node.getNodeName());
+                graph.getNode(id).addAttribute("z_level",0);
+                graph.getNode(id).addAttribute("xyz",node.getLat(),node.getLon(),0);
+                
+                }
+                keys = GraphHandler.edgeMap.keySet();
+                for(int key : keys)
+                {
+                REdge edge = GraphHandler.edgeMap.get(key);
+                graph.addEdge(String.valueOf(key),String.valueOf(edge.getFirstNode()) ,String.valueOf(edge.getSecondNode()));
+                
+                }  */
+               //graph.display(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (GraphParseException ex) {
+                Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        catch(ElementNotFoundException e  ) 
         {
             System.out.println(e);
 	    return;
@@ -99,7 +129,7 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
         
         //new UpdateTimer(graph).start();
        // this.wait(5000);
-        new UpdateEdgeColor(graph).start();
+        //new UpdateEdgeColor(graph).start();
         
     }
     
@@ -173,6 +203,11 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
         buttonSearch.setBackground(new java.awt.Color(255, 204, 0));
         buttonSearch.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         buttonSearch.setLabel("Search");
+        buttonSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonSearchMouseClicked(evt);
+            }
+        });
 
         labelSearchNode.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         labelSearchNode.setText("Search Node :");
@@ -241,10 +276,8 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCanvasMenuLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(buttonSearch))
-                    .addGroup(panelCanvasMenuLayout.createSequentialGroup()
-                        .addComponent(labelSearchNode)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonSetOrigin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelSearchNode)
+                    .addComponent(buttonSetOrigin, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                     .addGroup(panelCanvasMenuLayout.createSequentialGroup()
                         .addComponent(labelZoomControl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -319,8 +352,8 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
     private void buttonResetZoomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonResetZoomMouseClicked
         // TODO add your handling code here:
         zoomLevel = 1.0f;
-        curNodeXYCords[0] = 76.2936 ; 
-        curNodeXYCords[1] =  -9.9902 ;
+        curNodeXYCords[0] =  76.323 ;  
+        curNodeXYCords[1] = -10.0046;
         renderScene();
     }//GEN-LAST:event_buttonResetZoomMouseClicked
 
@@ -329,6 +362,43 @@ public class Canvas extends javax.swing.JPanel implements ViewerListener//Canvas
          setOrigin();
          System.out.println(curNodeXYCords[0]+" "+curNodeXYCords[1]);
     }//GEN-LAST:event_buttonSetOriginMouseClicked
+
+    private void buttonSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonSearchMouseClicked
+        // TODO add your handling code here:
+        String searchWrd = textFieldSearch.getText();
+        int srchId ;
+        try
+        {
+            srchId = Integer.valueOf(searchWrd);
+            if(srchId >= 101 && srchId<=130)
+            {
+                Node nd = graph.getNode(searchWrd);
+                resultTextPane.setText("\n"+nd.getId()+"\n"+nd.getLabel("ui.label")+"");
+            }
+        }
+        catch(NumberFormatException e)
+        {
+            String label="";
+            String id="";
+            boolean found = false;
+            for(Node node : graph)
+            {
+               label = String.join(node.getLabel("ui.label"),"");
+               if(label.equalsIgnoreCase(searchWrd))
+               {
+                   id = node.getId();
+                   found = true;
+                   break;
+               }
+              
+            }
+            if(found)
+            {
+               resultTextPane.setText("\n"+id+"\n"+label+""+"\nLat :"); 
+            }
+        }
+                
+    }//GEN-LAST:event_buttonSearchMouseClicked
 
     
     @Override
@@ -373,12 +443,19 @@ class UpdateTimer extends Timer
                         @Override
                                 public void actionPerformed(ActionEvent e)
                                 {
-                                    
+                                    Random rnd = new Random();
+                                    double lvl = 0.0;
                                     for(Edge edg : G.getEachEdge())
                                     {
-                                        double speedMax = edg.getNumber("speedMax") / 130.0;
-                                        edg.setAttribute("ui.color", speedMax);
+                                        //double speedMax = edg.getNumber("speedMax") / 130.0;
+                                        //edg.setAttribute("ui.color", speedMax);
+                                        //float r = rnd.nextFloat();
+                                        //lvl+=r;
+                                        edg.setAttribute("ui.color",rnd.nextFloat()); 
                                     }
+                                    lvl/=30;
+                                    //ManagerPanel.
+                                    
                                 }
                     }
             );
@@ -397,7 +474,8 @@ class UpdateEdgeColor extends Timer
                                 {
                                     for(Node nd : G.getEachNode())
                                     {                                           
-                                        nd.setAttribute("ui.color", rnd.nextDouble());
+                                        nd.setAttribute("ui.color", rnd.nextFloat());
+                                       
                                     }
                                 }
                     }

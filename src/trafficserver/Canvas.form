@@ -84,7 +84,7 @@
                           <Component id="buttonSearch" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="labelSearchNode" min="-2" max="-2" attributes="0"/>
-                      <Component id="buttonSetOrigin" pref="150" max="32767" attributes="0"/>
+                      <Component id="buttonSetOrigin" pref="140" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="labelZoomControl" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
@@ -148,6 +148,9 @@
             </Property>
             <Property name="label" type="java.lang.String" value="Search"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="buttonSearchMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="labelSearchNode">
           <Properties>

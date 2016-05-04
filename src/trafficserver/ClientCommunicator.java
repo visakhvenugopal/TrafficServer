@@ -24,7 +24,7 @@ import org.json.JSONObject;
  */
 public class ClientCommunicator extends Thread {
 
-    private static int PORT_NUM = 8000;
+    private static int PORT_NUM = 7008;
     DatagramSocket serverSocket;
 
     public ClientCommunicator() {
@@ -42,7 +42,7 @@ public class ClientCommunicator extends Thread {
         }
         while (true) 
         {
-            PORT_NUM = 8000;
+            PORT_NUM = 7008;
             if (serverSocket.isBound()) {
                 System.out.println("Intialised sever Socket :" + serverSocket.getPort());
             } else {
@@ -109,7 +109,7 @@ class ClientRequestHandler extends Thread {
 
             if (builder == null) 
             {
-                System.out.println("Request parse erro..!");
+                System.out.println("Request parse error..!");
                 return;
             }
 

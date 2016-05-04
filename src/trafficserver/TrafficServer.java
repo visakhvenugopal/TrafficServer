@@ -25,7 +25,9 @@ public class TrafficServer extends javax.swing.JFrame
     Canvas painter;
     ManagerPanel manager;
     StatisticsPanel analyst;
-    ServerAdmin serverAdmin = null;
+    NodeListener nodelistener;
+    ServerAdmin serverAdmin ;
+    static public AStarImpl aStarAlgorithm ;
     private javax.swing.JButton currentMenu = null;
     private javax.swing.JPanel currentPanel = null;
     private boolean isServiceActive = false ; 
@@ -43,6 +45,8 @@ public class TrafficServer extends javax.swing.JFrame
         painter = new Canvas();
         manager = new ManagerPanel();
         analyst = new StatisticsPanel();
+        aStarAlgorithm = new AStarImpl();
+        nodelistener = new NodeListener();
         
         painter.setVisible(false);
         manager.setVisible(false);
@@ -73,7 +77,8 @@ public class TrafficServer extends javax.swing.JFrame
                 }
             }).start();
         
-        
+        //test
+        //aStarAlgorithm.aStarPath("105", "121");
     }
     
     private void menuSelected(javax.swing.JButton currentBtn,javax.swing.JPanel currentPnl)

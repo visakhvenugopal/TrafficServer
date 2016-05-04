@@ -57,7 +57,6 @@
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="labelGeoLocation" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="labelNoOfVehicles" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                               <Component id="comboBoxSelectNode" min="-2" pref="59" max="-2" attributes="0"/>
@@ -65,27 +64,19 @@
                                       </Group>
                                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="labelNoOfVehiclesValue" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="labelSelectedNodeName" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
                                           <Component id="labelGeoLocationValue" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="labelTimeDependentDelay" min="-2" max="-2" attributes="0"/>
-                                          <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
-                                          <Component id="textFieldSetTimeDependentDelay" min="-2" pref="28" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                                      <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="178" max="32767" attributes="0"/>
+                      <EmptySpace pref="362" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -124,12 +115,7 @@
                           <Component id="labelGeoLocation" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="labelGeoLocationValue" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="labelNoOfVehicles" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelNoOfVehiclesValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="labelLocalCongestion" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="labelLocalCongestionValue" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -141,12 +127,7 @@
                           <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
                           <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="textFieldSetTimeDependentDelay" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelTimeDependentDelay" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="47" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="73" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -190,6 +171,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="66%"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="labelManageNode">
       <Properties>
@@ -251,19 +235,6 @@
         <Property name="orientation" type="int" value="1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="labelNoOfVehicles">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="33" green="0" red="99" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="No Of Vehicles"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelNoOfVehiclesValue">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="--"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="labelLocalCongestion">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -311,23 +282,11 @@
       <Properties>
         <Property name="paintLabels" type="boolean" value="true"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="value" type="int" value="0"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelTimeDependentDelay">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="33" green="0" red="99" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Time Dependent Delay"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="textFieldSetTimeDependentDelay">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
-      </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textFieldSetTimeDependentDelayActionPerformed"/>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="sliderAdjustCongestionValueMouseReleased"/>
       </Events>
     </Component>
   </SubComponents>

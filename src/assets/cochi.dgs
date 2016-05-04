@@ -15,7 +15,7 @@ cn "102"  "xyz":76.2936,-10.0214,0
 an "103"
 cn "103"  "ui.label":"NH66"
 cn "103"  "z_level":0
-cn "103"  "xyz":76.3226,-10.0044,0
+cn "103"  "xyz":76.30508,-9.9816,0
 
 an "104"
 cn "104"  "ui.label":"Kadavanthra"
@@ -48,9 +48,9 @@ cn "109"  "z_level":0
 cn "109"  "xyz":76.3470,-9.9508,0
 
 an "110"
-cn "110"  "ui.label":"Kakkanad"
+cn "110"  "ui.label":"Tripunithura"
 cn "110"  "z_level":0
-cn "110"  "xyz":76.3470,-9.9508,0
+cn "110"  "xyz":76.38025,-9.9697,0
 
 an "111"
 cn "111"  "ui.label":"Vaduthala"
@@ -80,62 +80,62 @@ cn "115"  "xyz":76.2418,-9.9870,0
 an "116"
 cn "116"  "ui.label":"NH85"
 cn "116"  "z_level":0
-cn "116"  "xyz":76.3116,-10.0328,0
+cn "116"  "xyz":76.338537,-10.0139115,0
 
 an "117"
 cn "117"  "ui.label":"Kannankulangara"
 cn "117"  "z_level":0
-cn "117"  "xyz":76.3226,-10.0324,0
+cn "117"  "xyz":76.35226,-10.017737,0
 
 an "118"
 cn "118"  "ui.label":"Eroor Road"
 cn "118"  "z_level":0
-cn "118"  "xyz":76.3358,-10.0294,0
+cn "118"  "xyz":76.35654,-10.002209,0
 
 an "119"
 cn "119"  "ui.label":"Refinery Road"
 cn "119"  "z_level":0
-cn "119"  "xyz":76.3518,-10.0294,0
+cn "119"  "xyz":76.33628,-9.99163,0
 
 an "120"
 cn "120"  "ui.label":"Chilavannoor Road"
 cn "120"  "z_level":0
-cn "120"  "xyz":76.3804,-10.0246,0
+cn "120"  "xyz":76.3166515,-10.0555644,0
 
 an "121"
 cn "121"  "ui.label":"Kundannoor"
 cn "121"  "z_level":0
-cn "121"  "xyz":76.3648,-10.0188,0
+cn "121"  "xyz":76.354241,-10.050116,0
 
 an "122"
 cn "122"  "ui.label":"Sahodaran Ayyappan Road"
 cn "122"  "z_level":0
-cn "122"  "xyz":76.3606,-10.0220,0
+cn "122"  "xyz":76.3795742,-10.0326834,0
 
 an "123"
 cn "123"  "ui.label":"Thoppumpadi"
 cn "123"  "z_level":0
-cn "123"  "xyz":76.3448,-10.0162,0
+cn "123"  "xyz":76.35642,-10.0392208,0
 
 an "124"
 cn "124"  "ui.label":"Shipyard Quarters"
 cn "124"  "z_level":0
-cn "124"  "xyz":76.3587,-10.0220,0
+cn "124"  "xyz":76.3974075,-10.01471614,0
 
 an "125"
 cn "125"  "ui.label":"Jos Junction"
 cn "125"  "z_level":0
-cn "125"  "xyz":76.3732,-10.0098,0
+cn "125"  "xyz":76.380395,-10.0593694,0
 
 an "126"
 cn "126"  "ui.label":"DH Ground"
 cn "126"  "z_level":0
-cn "126"  "xyz":76.3674,-10.0172,0
+cn "126"  "xyz":76.353969,-10.0664601,0
 
 an "127"
 cn "127"  "ui.label":"TD Road"
 cn "127"  "z_level":0
-cn "127"  "xyz":76.3364,-10.0192,0
+cn "127"  "xyz":76.328609,-10.0282709,0
 
 an "128"
 cn "128"  "ui.label":"Ravipuram Road"

@@ -101,7 +101,7 @@ public class MouseManager implements MouseInputListener
         System.out.println(x+":"+y);
         curNodeXYCords[0] = Double.parseDouble(x);
         curNodeXYCords[1] = Double.parseDouble(y);
-        parent.resultTextPane.setText("\n Node: "+curElement.label+"\n Cords \n   "+x+":"+y);
+        parent.resultTextPane.setText("\n"+curElement.getId()+"\n"+curElement.label+"\nLat : "+x+"\nLon : "+y);
     }
     
 }
