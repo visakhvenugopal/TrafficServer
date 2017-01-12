@@ -16,16 +16,9 @@ public class ManagerPanel extends javax.swing.JPanel {
     /**
      * Creates new form ManagerPanel
      */
-    
-    boolean []overrideState;
-    
-    public ManagerPanel()
-    {
-       
+    public ManagerPanel() {
+
         initComponents();
-        overrideState = new boolean[30];
-        for(int i=0 ;i<30;i++)
-            overrideState[i] = false;
         sliderAdjustCongestionValue.setEnabled(false);
     }
 
@@ -113,6 +106,7 @@ public class ManagerPanel extends javax.swing.JPanel {
         labelSetLocalCongestion.setForeground(new java.awt.Color(153, 0, 51));
         labelSetLocalCongestion.setText("Congestion Level");
 
+        sliderAdjustCongestionValue.setMaximum(2);
         sliderAdjustCongestionValue.setPaintLabels(true);
         sliderAdjustCongestionValue.setToolTipText("");
         sliderAdjustCongestionValue.setValue(0);
@@ -138,7 +132,7 @@ public class ManagerPanel extends javax.swing.JPanel {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(26, 26, 26))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(labelNoNodes)
@@ -172,8 +166,8 @@ public class ManagerPanel extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(labelSetLocalCongestion)
                                         .addGap(36, 36, 36)
-                                        .addComponent(sliderAdjustCongestionValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(362, Short.MAX_VALUE))))
+                                        .addComponent(sliderAdjustCongestionValue, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
+                        .addContainerGap(395, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,42 +222,61 @@ public class ManagerPanel extends javax.swing.JPanel {
 
     private void checkBoxCongestionValueOverrideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkBoxCongestionValueOverrideStateChanged
         // TODO add your handling code here:
-        int nodeID = Integer.valueOf((String)comboBoxSelectNode.getSelectedItem());
-        int stateIndex = nodeID - 101;
-        if(checkBoxCongestionValueOverride.isSelected())
-        {
+        int nodeID = Integer.valueOf((String) comboBoxSelectNode.getSelectedItem());
+        RNode sel = GraphHandler.nodeMap.get(nodeID);
+        if (checkBoxCongestionValueOverride.isSelected()) {
             sliderAdjustCongestionValue.setEnabled(true);
-            overrideState[stateIndex] = true;
-        }
-            
-        else
-        {
+            sel.setOverridden(true);
+        } else {
             sliderAdjustCongestionValue.setEnabled(false);
-            overrideState[stateIndex] = false;
+            sel.setOverridden(false);
         }
-            
+
     }//GEN-LAST:event_checkBoxCongestionValueOverrideStateChanged
 
     private void comboBoxSelectNodeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxSelectNodeItemStateChanged
         // TODO add your handling code here:
-        int nodeID = Integer.valueOf((String)comboBoxSelectNode.getSelectedItem());
+        int nodeID = Integer.valueOf((String) comboBoxSelectNode.getSelectedItem());
         System.out.println(nodeID);
         RNode sel = GraphHandler.nodeMap.get(nodeID);
         labelSelectedNodeName.setText(sel.getNodeName());
-        labelGeoLocationValue.setText(sel.getLat()+":"+sel.getLon());
+        labelGeoLocationValue.setText(sel.getLat() + ":" + sel.getLon());
         labelLocalCongestionValue.setText(String.valueOf(sel.getCongestionIndex()));
-        int stateIndex = nodeID -101;
-        sliderAdjustCongestionValue.setEnabled(overrideState[stateIndex]);
-        checkBoxCongestionValueOverride.setSelected(overrideState[stateIndex]);
-        
+        sliderAdjustCongestionValue.setEnabled(sel.getOverridden());
+        checkBoxCongestionValueOverride.setSelected(sel.getOverridden());
+        labelLocalCongestionValue.setText("" + sel.getCongestionIndex());
     }//GEN-LAST:event_comboBoxSelectNodeItemStateChanged
 
     private void sliderAdjustCongestionValueMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderAdjustCongestionValueMouseReleased
         // TODO add your handling code here:
-        String nodeID = (String)comboBoxSelectNode.getSelectedItem();
-        Node node = Canvas.graph.getNode(nodeID);
-        System.out.println(node.getLabel("ui.label"));
-        node.setAttribute("ui.color",sliderAdjustCongestionValue.getValue()/100);
+        int nodeID = Integer.valueOf((String) comboBoxSelectNode.getSelectedItem());
+        int conIndex = sliderAdjustCongestionValue.getValue();
+
+        RNode sel = GraphHandler.nodeMap.get(nodeID);
+        Node nod = Canvas.graph.getNode(String.valueOf(nodeID));
+        //sel.setCongestionIndex(conIndex);
+        nod.setAttribute("ui.color", (double) conIndex / 2.0);
+        labelLocalCongestionValue.setText("" + conIndex);
+        switch (conIndex) {
+            case 0:
+                sel.setNodeAvailability(true);
+                sel.setCurationTime(0);
+                break;
+            case 1:
+                sel.setNodeAvailability(true);
+                sel.setCurationTime(15);
+                sel.informCongestion();
+                break;
+            case 2:;
+                sel.setNodeAvailability(false);
+                sel.setCurationTime(1000);
+                sel.informCongestion();
+                break;
+        }
+
+        sel.setCongestionIndex(conIndex);
+        sel.setLastUpdateTime((int) System.currentTimeMillis() / 1000);
+
     }//GEN-LAST:event_sliderAdjustCongestionValueMouseReleased
 
 

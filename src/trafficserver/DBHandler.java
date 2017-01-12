@@ -10,13 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class DBHandler {
 
     //The connection object
-
     private static Connection connection;
 
     //constructor loads the JDBC driver
@@ -32,7 +33,7 @@ public class DBHandler {
         try {
             //load JDBC driver
             Class.forName(driverName).newInstance();
-                        connection = DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(url, username, password);
 
         } catch (ClassNotFoundException e) {
             System.out.println("\nClass not found: " + e.getMessage());
@@ -62,7 +63,6 @@ public class DBHandler {
         Statement statement = connection.createStatement();
         String query = "SELECT NID FROM node_table WHERE NdName=" + name;
         ResultSet result = statement.executeQuery(query);
-        
 
         if (result == null) {
             return null;
@@ -98,7 +98,6 @@ public class DBHandler {
             //Temporary variables
             //Set<Integer> inEdges;
             //String[] outEdges;
-
             //variables for deserialisation
             String[] edgeList;
             ObjectInputStream oiStream;
@@ -106,7 +105,7 @@ public class DBHandler {
             while (result.next()) {
                 nodeId = result.getInt("NID");
                 node = new RNode(result.getString("NdName"), Double.parseDouble(result.getString("Lat")), Double.parseDouble(result.getString("Lon")));
-
+                node.id = nodeId;
                 //to deserialise the inedge data
                 /*tempBuffer = result.getBytes("INEDGE");
                  oiStream = new ObjectInputStream(new ByteArrayInputStream(tempBuffer));
@@ -153,7 +152,7 @@ public class DBHandler {
             while (result.next()) {
                 edgeId = result.getInt("EID");
                 edge = new REdge(result.getFloat("Distance"), result.getInt("TIME"), result.getInt("ND1"), result.getInt("ND2"));
-
+                edge.id = edgeId;
                 //add the node into the map
                 edgeMap.put(edgeId, edge);
             }
@@ -164,94 +163,95 @@ public class DBHandler {
             return null;
         }
     }
-    
+
     //returns the nearest nodes to the end points
     public int[] getNearestNodes(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         int[] endNodes = new int[2];
         double currentBestDistance = Double.MAX_VALUE;
         /*double dispFact = 0.06;
         
-        int nodeId;
-        double currentDistance;
-        double latitude;
-        double longitude;
+         int nodeId;
+         double currentDistance;
+         double latitude;
+         double longitude;
         
-        try {
-            String query = "SELECT NID,Lat,Lon FROM node_table WHERE (Lat BETWEEN ? AND ?) AND (Lon BETWEEN ? AND ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setDouble(1, startLatitude + dispFact);
-            statement.setDouble(2, startLatitude - dispFact);
-            statement.setDouble(3, endLatitude + dispFact);
-            statement.setDouble(4, endLatitude - dispFact);
-            //finding the starting node
+         try {
+         String query = "SELECT NID,Lat,Lon FROM node_table WHERE (Lat BETWEEN ? AND ?) AND (Lon BETWEEN ? AND ?)";
+         PreparedStatement statement = connection.prepareStatement(query);
+         statement.setDouble(1, startLatitude + dispFact);
+         statement.setDouble(2, startLatitude - dispFact);
+         statement.setDouble(3, endLatitude + dispFact);
+         statement.setDouble(4, endLatitude - dispFact);
+         //finding the starting node
             
-            ResultSet result = statement.executeQuery();
-            //continue the query with a high displacement factor untill we get a non empty result set
-            while(result == null){
-                dispFact += 0.01;
-                query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (startLatitude + dispFact) + " AND " + (startLatitude - dispFact) + ") AND (Longitude BETWEEN " + (startLongitude + dispFact) + " AND " + (startLongitude - dispFact) +")";
-                result = statement.executeQuery(query);
-            }
+         ResultSet result = statement.executeQuery();
+         //continue the query with a high displacement factor untill we get a non empty result set
+         while(result == null){
+         dispFact += 0.01;
+         query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (startLatitude + dispFact) + " AND " + (startLatitude - dispFact) + ") AND (Longitude BETWEEN " + (startLongitude + dispFact) + " AND " + (startLongitude - dispFact) +")";
+         result = statement.executeQuery(query);
+         }
             
-            while(result.next()){
-                nodeId = result.getInt("NID");
-                latitude = Double.parseDouble(result.getString("Lattitude"));
-                longitude = Double.parseDouble(result.getString("Longitude"));
+         while(result.next()){
+         nodeId = result.getInt("NID");
+         latitude = Double.parseDouble(result.getString("Lattitude"));
+         longitude = Double.parseDouble(result.getString("Longitude"));
                 
-                currentDistance = distanceInKMeters(startLatitude, startLongitude, latitude, longitude);
+         currentDistance = distanceInKMeters(startLatitude, startLongitude, latitude, longitude);
                 
-                if(currentDistance < currentBestDistance){
-                    endNodes[0] = nodeId;
-                    currentBestDistance = currentDistance;
-                }
-            }
+         if(currentDistance < currentBestDistance){
+         endNodes[0] = nodeId;
+         currentBestDistance = currentDistance;
+         }
+         }
             
-            //finding the ending node
-            dispFact = 0.06;
-            currentBestDistance = Double.MAX_VALUE;
-            query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (endLatitude + dispFact) + " AND " + (endLatitude - dispFact) + ") AND (Longitude BETWEEN " + (endLongitude + dispFact) + " AND " + (endLongitude - dispFact) +")";
-            result = statement.executeQuery(query);
-            //continue the query with a high displacement factor untill we get a non empty result set
-            while(result == null){
-                dispFact += 0.01;
-                query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (endLatitude + dispFact) + " AND " + (endLatitude - dispFact) + ") AND (Longitude BETWEEN " + (endLongitude + dispFact) + " AND " + (endLongitude - dispFact) +")";
-                result = statement.executeQuery(query);
-            }
+         //finding the ending node
+         dispFact = 0.06;
+         currentBestDistance = Double.MAX_VALUE;
+         query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (endLatitude + dispFact) + " AND " + (endLatitude - dispFact) + ") AND (Longitude BETWEEN " + (endLongitude + dispFact) + " AND " + (endLongitude - dispFact) +")";
+         result = statement.executeQuery(query);
+         //continue the query with a high displacement factor untill we get a non empty result set
+         while(result == null){
+         dispFact += 0.01;
+         query = "SELECT NID,Lattitude,Longitude FROM node_table WHERE (Lattitude BETWEEN " + (endLatitude + dispFact) + " AND " + (endLatitude - dispFact) + ") AND (Longitude BETWEEN " + (endLongitude + dispFact) + " AND " + (endLongitude - dispFact) +")";
+         result = statement.executeQuery(query);
+         }
             
-            while(result.next()){
-                nodeId = result.getInt("NID");
-                latitude = Double.parseDouble(result.getString("Lattitude"));
-                longitude = Double.parseDouble(result.getString("Longitude"));
+         while(result.next()){
+         nodeId = result.getInt("NID");
+         latitude = Double.parseDouble(result.getString("Lattitude"));
+         longitude = Double.parseDouble(result.getString("Longitude"));
                 
-                currentDistance = distanceInKMeters(startLatitude, startLongitude, latitude, longitude);
+         currentDistance = distanceInKMeters(startLatitude, startLongitude, latitude, longitude);
                 
-                if(currentDistance < currentBestDistance){
-                    endNodes[1] = nodeId;
-                    currentBestDistance = currentDistance;
-                }
-            }
+         if(currentDistance < currentBestDistance){
+         endNodes[1] = nodeId;
+         currentBestDistance = currentDistance;
+         }
+         }
             
-            return endNodes;
+         return endNodes;
             
-        } catch (SQLException ex) {
-            return null;
-        }*/
+         } catch (SQLException ex) {
+         return null;
+         }*/
         Set<Integer> keyList = GraphHandler.nodeMap.keySet();
         double currDist;
-        for(Integer node: keyList){
-            currDist = Math.sqrt((GraphHandler.nodeMap.get(node).getLat() - startLatitude)*(GraphHandler.nodeMap.get(node).getLat() - startLatitude) +
-                    (GraphHandler.nodeMap.get(node).getLon() - startLongitude)*(GraphHandler.nodeMap.get(node).getLon() - startLongitude));
-            if(currDist < currentBestDistance){
+        for (Integer node : keyList) {
+            currDist = Math.sqrt(((GraphHandler.nodeMap.get(node).getLat() - startLatitude) * (GraphHandler.nodeMap.get(node).getLat() - startLatitude))
+                    + ((GraphHandler.nodeMap.get(node).getLon() - startLongitude) * (GraphHandler.nodeMap.get(node).getLon() - startLongitude)));
+            if (currDist < currentBestDistance) {
                 currentBestDistance = currDist;
                 endNodes[0] = node;
             }
         }
-        
+
         currentBestDistance = Double.MAX_VALUE;
-        for(Integer node: keyList){
-            currDist = Math.sqrt((GraphHandler.nodeMap.get(node).getLat() - endLatitude)*(GraphHandler.nodeMap.get(node).getLat() - endLatitude) +
-                    (GraphHandler.nodeMap.get(node).getLon() - endLongitude)*(GraphHandler.nodeMap.get(node).getLon() - endLongitude));
-            if(currDist < currentBestDistance){
+        keyList = GraphHandler.nodeMap.keySet();
+        for (Integer node : keyList) {
+            currDist = Math.sqrt((GraphHandler.nodeMap.get(node).getLat() - endLatitude) * (GraphHandler.nodeMap.get(node).getLat() - endLatitude)
+                    + (GraphHandler.nodeMap.get(node).getLon() - endLongitude) * (GraphHandler.nodeMap.get(node).getLon() - endLongitude));
+            if (currDist < currentBestDistance) {
                 currentBestDistance = currDist;
                 endNodes[1] = node;
             }
@@ -259,7 +259,7 @@ public class DBHandler {
         System.out.println("" + endNodes[0] + " " + endNodes[1]);
         return endNodes;
     }
-    
+
     private double distanceInKMeters(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
@@ -276,7 +276,7 @@ public class DBHandler {
     private double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
-    
+
     //node Hash map creator
     //return null if any error occurs
     public boolean updateUserNodeList(int userId, String nodeList) throws IOException, ClassNotFoundException {
@@ -290,36 +290,45 @@ public class DBHandler {
             statement.setInt(1, userId);
             ResultSet result = statement.executeQuery();
 
-            if (result == null) {
+            if (!result.first()) {
+                System.out.println("No such user..");
                 return false;
             }
-            result.next();
+
             String currentNodeList = result.getString("Nodes");
             String GCMID = result.getString("GCM_id");
-            if(currentNodeList.equals(nodeList)){
-                return false;
-            } else{
-                String[] ndList = currentNodeList.split(" ");
-                int ndId;
-                for(String ndIdString: ndList){
-                    ndId = Integer.parseInt(ndIdString);
-                    GraphHandler.nodeMap.get(ndId).removeNodeUser(GCMID);
-                }
-                
-                statement = connection.prepareStatement("UPDATE user_table SET Nodes=? WHERE UID=?");
-                statement.setString(1, nodeList);
-                statement.setInt(2, userId);
-                statement.executeUpdate();
+            if (currentNodeList.equals(nodeList)) {
                 return true;
+            } else {
+                String[] ndList = currentNodeList.split(" ");
+                System.out.println("old NodeList :" + Arrays.toString(ndList));
+                
+                if (!ndList[0].equals("empty")){
+                    int ndId;
+                    for (String ndIdString : ndList) {
+                        System.out.println(ndIdString);
+                        ndId = Integer.parseInt(ndIdString);
+                        GraphHandler.nodeMap.get(ndId).removeNodeUser(GCMID);
+                    }
+                }
+
+                    statement = connection.prepareStatement("UPDATE user_table SET Nodes=? WHERE UID=?");
+                    statement.setString(1, nodeList);
+                    statement.setInt(2, userId);
+                    statement.executeUpdate();
+                    
+                    
+                    return true;
+                
             }
-           
+
         } catch (SQLException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
-    
-    public int addNewUser(String GCMID){
+
+    public int addNewUser(String GCMID) {
         if (connection == null) {
             return Integer.MAX_VALUE;
         }
@@ -327,8 +336,9 @@ public class DBHandler {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_table WHERE GCM_id=?");
             statement.setString(1, GCMID);
-            if(statement.executeQuery().next())
+            if (statement.executeQuery().next()) {
                 return Integer.MAX_VALUE;
+            }
 
             statement = connection.prepareStatement("INSERT INTO user_table(GCM_id, Nodes)VALUES(?,?)");
             statement.setString(1, GCMID);
@@ -338,16 +348,16 @@ public class DBHandler {
             statement = connection.prepareStatement("SELECT UID FROM USER_TABLE WHERE GCM_id=?");
             statement.setString(1, GCMID);
             ResultSet result = statement.executeQuery();
-            result.next();  
+            result.next();
             return result.getInt("UID");
         } catch (SQLException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
             return Integer.MAX_VALUE;
         }
     }
-    
-    public String getGCMId(int userId){
-       if (connection == null) {
+
+    public String getGCMId(int userId) {
+        if (connection == null) {
             return null;
         }
 
@@ -362,10 +372,10 @@ public class DBHandler {
             }
             result.next();
             return result.getString("GCM_id");
-           
+
         } catch (SQLException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        } 
+        }
     }
 }

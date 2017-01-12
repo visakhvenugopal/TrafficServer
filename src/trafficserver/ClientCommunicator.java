@@ -24,7 +24,7 @@ import org.json.JSONObject;
  */
 public class ClientCommunicator extends Thread {
 
-    private static int PORT_NUM = 7008;
+    private static int PORT_NUM = 8000;
     DatagramSocket serverSocket;
 
     public ClientCommunicator() {
@@ -42,7 +42,7 @@ public class ClientCommunicator extends Thread {
         }
         while (true) 
         {
-            PORT_NUM = 7008;
+            PORT_NUM = 8000;
             if (serverSocket.isBound()) {
                 System.out.println("Intialised sever Socket :" + serverSocket.getPort());
             } else {
@@ -104,12 +104,15 @@ class ClientRequestHandler extends Thread {
 
             new GCMBroadcast().broadcast(androidTargetList, collapseKey, gcmMsg);
         } else if (requestType.equals("rout")) {
+            System.out.println("inside.communicator router");
             GraphHandler graph = new GraphHandler(json.getInt("userid"));
-            Message.Builder builder = graph.getRout(json.getDouble("slat"), json.getDouble("slon"), json.getDouble("elat"), json.getDouble("elon"));
+            if(graph != null)
+                ;//System.out.println(graph.check());
+            Message.Builder builder = graph.getRout(json.getInt("nd1"), json.getInt("nd2"));//json.getDouble("slat"), json.getDouble("slon"), json.getDouble("elat"), json.getDouble("elon"));
 
             if (builder == null) 
             {
-                System.out.println("Request parse error..!");
+                System.out.println("No routs available right now..!");
                 return;
             }
 

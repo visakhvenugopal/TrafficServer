@@ -2,11 +2,11 @@ package trafficserver;
 
 public class REdge {
 
+    public int id;
     final private float length; //DISTANCE in km
     private int avgTravelTime;//AVGTIME in min
     private int node1;//NODE1
     private int node2;//NODE2
-
 
     private boolean isAvailable;//specifies whether the road is available at the moment of usage
 
@@ -24,7 +24,6 @@ public class REdge {
         node1 = firstNode;
         node2 = secondNode;
         isAvailable = true;//specifies whether the road is available at the moment of usage
-
 
         node1Randomiser = 0;
         node2Randomiser = 0;
@@ -50,7 +49,7 @@ public class REdge {
         }
 
     }
-    
+
     //method to set the availability of nodes
     public void setNodeAvailable(Integer nodeId, boolean isAvailable) {
 
@@ -59,7 +58,13 @@ public class REdge {
 
     //method to check if the specified node is avilable
     public boolean isNodeAvailable(Integer nodeId) {
-        return GraphHandler.nodeMap.get(nodeId).getNodeAvailability();
+        RNode node = GraphHandler.nodeMap.get(nodeId);
+
+        if (node == null) {
+            return false;
+        }
+
+        return node.getNodeAvailability();
     }
 
     //method to get length
@@ -105,20 +110,32 @@ public class REdge {
     }
     //method to return travelTime
    /* public long getTravelTimeTo(Integer nodeId) {
-        int addedWeight = 0;
+     int addedWeight = 0;
 
-        if (nodeId.equals(node1)) {
-            addedWeight = node1Randomiser + GraphHandler.nodeMap.get(node1).getCurationTime();
-        } else if (nodeId.equals(node2)) {
-            addedWeight = node2Randomiser + GraphHandler.nodeMap.get(node2).getCurationTime();
-        }
+     if (nodeId.equals(node1)) {
+     addedWeight = node1Randomiser + GraphHandler.nodeMap.get(node1).getCurationTime();
+     } else if (nodeId.equals(node2)) {
+     addedWeight = node2Randomiser + GraphHandler.nodeMap.get(node2).getCurationTime();
+     }
 
-        return avgTravelTime + addedWeight;
-    }*/
+     return avgTravelTime + addedWeight;
+     }*/
 
     //method to return travelTime
     public int getTravelTimeTo(Integer nodeId, int time) {
         int rand = 0;
+        RNode node = GraphHandler.nodeMap.get(nodeId);
+        int congIndex = node.getCongestionIndex();
+        if (congIndex == 1) {
+            int reachTime = time + avgTravelTime;
+            long lastUpdateTime = node.getLastUpdateTime();
+            lastUpdateTime = (long)(lastUpdateTime / 60) % (24 * 60);
+            int curationTime = node.getCurationTime();
+            int waitTime = (int)(curationTime + lastUpdateTime) - reachTime; 
+            if(waitTime > 0)
+                rand = waitTime;
+            
+        }
 
         if (nodeId.equals(node1)) {
             rand = node1Randomiser;
@@ -126,7 +143,7 @@ public class REdge {
             rand = node2Randomiser;
         }
 
-        return avgTravelTime + rand + GraphHandler.nodeMap.get(nodeId).getDelayAt(computeTimeIn24HrFormat(time, avgTravelTime));
+        return avgTravelTime + rand + node.getDelayAt(computeTimeIn24HrFormat(time, avgTravelTime));
     }
 
     private int computeTimeIn24HrFormat(int currTime, int timeToAddMin) {
@@ -149,11 +166,11 @@ public class REdge {
 
         return currTime;
     }
-    
-    public void updateNodeRandomiser(int nodeId){
-        if(nodeId == node1){
+
+    public void updateNodeRandomiser(int nodeId) {
+        if (nodeId == node1) {
             node1Randomiser = (node1Randomiser + 2) % 20;
-        } else if (nodeId == node2){
+        } else if (nodeId == node2) {
             node2Randomiser = (node2Randomiser + 2) % 20;
         }
     }

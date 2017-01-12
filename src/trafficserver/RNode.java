@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.graphstream.graph.Node;
 
 public class RNode {
 
@@ -16,6 +17,7 @@ public class RNode {
     private String name;
     private final double latitude;
     private final double longitude;
+    private boolean overridden;
 
     //private List<Integer> inEdges;
     private String[] outEdges;
@@ -42,11 +44,12 @@ public class RNode {
         latitude = lat;
         longitude = longi;
         name = nodeName;
+        overridden = false;
 
         outEdges = null;
 
         timeDependentDelay = new HashMap<>();
-        for(int i = 0; i < 12; i++){
+        for(int i = 0; i < 24; i++){
             timeDependentDelay.put(i, 0);
         }
 
@@ -61,6 +64,17 @@ public class RNode {
         curationTime = ttc;
     }
 
+    public boolean getOverridden()
+    {
+        return overridden ;
+    }
+    
+    public void setOverridden(boolean state)
+    {
+        overridden = state ;
+        
+    }
+    
     public int getCurationTime() {
         return curationTime;
     }
@@ -154,13 +168,13 @@ public class RNode {
         long arrivalTime;
         iterator = userList.iterator();
 
-        long currentTime = (System.currentTimeMillis() / (60 * 1000)) % (60 * 24);
+        long currentTime = (System.currentTimeMillis() / (60 * 1000));
         while (iterator.hasNext()) {
             tempGCMId = (String) iterator.next();
             arrivalTime = nodeUsers.get(tempGCMId);
-            if((arrivalTime + 15) < currentTime){
-                nodeUsers.remove(tempGCMId);
-            } else if ((arrivalTime - currentTime) <= (curationTime)) {
+            //new Notifier(tempGCMId).start();
+            
+            if ((arrivalTime - currentTime) <= (curationTime)) {
                 new Notifier(tempGCMId).start();
             }
         }
@@ -203,6 +217,7 @@ public class RNode {
             builder.addData("key", "congestion");
             builder.addData("node", "" + id);
             builder.addData("ttc", timeToCure);
+            builder.addData("user", GCMID);
             //create message
             //buld the message
             Message message = builder.build();

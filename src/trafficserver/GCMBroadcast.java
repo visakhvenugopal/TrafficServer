@@ -10,12 +10,8 @@ package trafficserver;
  * @author Acer-Lap
  */
 import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Sender;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GCMBroadcast {
 

@@ -30,7 +30,7 @@
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="labelNoNodes" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -71,12 +71,12 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="labelSetLocalCongestion" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                                      <Component id="sliderAdjustCongestionValue" min="-2" max="-2" attributes="0"/>
+                                      <Component id="sliderAdjustCongestionValue" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="362" max="32767" attributes="0"/>
+                      <EmptySpace pref="395" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -280,6 +280,7 @@
     </Component>
     <Component class="javax.swing.JSlider" name="sliderAdjustCongestionValue">
       <Properties>
+        <Property name="maximum" type="int" value="2"/>
         <Property name="paintLabels" type="boolean" value="true"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="value" type="int" value="0"/>
